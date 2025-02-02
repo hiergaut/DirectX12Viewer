@@ -11,6 +11,8 @@
 #include "pch.h"
 #include "Game.h"
 
+#include <iostream>
+
 #ifdef _GAMING_XBOX
 #include <appnotify.h>
 #include <XDisplay.h>
@@ -306,6 +308,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #endif
     }
 
+	//WCHAR file[MAX_PATH] = { L"cup" };
+	//g_game->OnFileOpen(file);
+	g_game->OnFileOpen(L"C:\\Users\\gauth\\Downloads\\directXCube.sdkmesh");
+
     // Main message loop
     MSG msg = {};
     while (WM_QUIT != msg.message)
@@ -547,6 +553,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (GetOpenFileName(&ofn))
             {
                 s_filterIndex = ofn.nFilterIndex;
+                std::cout << "open file " << szFile << std::endl;
                 game->OnFileOpen(szFile);
             }
         }

@@ -567,7 +567,9 @@ void Game::Update(DX::StepTimer const& timer)
         m_view = Matrix::CreateLookAt(m_lastCameraPos, m_cameraFocus, up);
     }
 
-    m_world = Matrix::CreateFromQuaternion(m_modelRot);
+    const auto iFrame = timer.GetFrameCount();
+    m_world = Matrix::CreateRotationY(iFrame / 80.0);
+    //m_world = Matrix::CreateFromQuaternion(m_modelRot);
 }
 #pragma endregion
 
@@ -651,6 +653,10 @@ void Game::Render()
         }
         else
         {
+            //m_spriteBatch->Begin(commandList);
+            //m_fontComic->DrawString(m_spriteBatch.get(), m_szModelName, XMFLOAT2(50, 50), Colors::Red);
+            //m_spriteBatch->End();
+
             {
                 auto radianceTex = m_resourceDescriptors->GetGpuHandle(Descriptors::RadianceIBL1 + m_ibl);
 
@@ -1092,6 +1098,10 @@ void Game::CreateDeviceDependentResources()
     m_hdrScene->SetDevice(device, m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex), m_renderDescriptors->GetCpuHandle(RTVDescriptors::HDRScene));
 
     m_states = std::make_unique<CommonStates>(device);
+
+    // addition
+    //m_model = Model::CreateFromSDKMESH(device, L"cup.sdkmesh");
+
 
     m_lineBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(device);
 
@@ -1683,7 +1693,8 @@ void Game::CameraHome()
     if (!m_model)
     {
         m_cameraFocus = Vector3::Zero;
-        m_distance = 10.f;
+        //m_distance = 10.f;
+        m_distance = 20.f;
         m_gridScale = 1.f;
     }
     else
@@ -1719,7 +1730,8 @@ void Game::CameraHome()
 
         m_gridScale = sphere.Radius;
 
-        m_distance = sphere.Radius * 2;
+        //m_distance = sphere.Radius * 2;
+        m_distance = sphere.Radius * 3;
 
         m_cameraFocus = sphere.Center;
     }
